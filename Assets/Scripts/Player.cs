@@ -8,6 +8,8 @@ public class Player : MonoBehaviour {
     public float jumpForce = 300f;
     public float move;
 
+    public int bitcon = 0;
+
     private bool isGrounded = false;
     private bool lookingRight = true;
 
@@ -55,6 +57,15 @@ public class Player : MonoBehaviour {
 
     }
 
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.gameObject.tag == "Bitcoin")
+        {
+            bitcon++;
+            Destroy(col.gameObject);
+        }
+    }
+
     void Flip()
     {
         Vector3 scale = transform.localScale;
@@ -63,6 +74,11 @@ public class Player : MonoBehaviour {
         transform.localScale = 
             new Vector3(scaleX, scale.y, scale.z);
         lookingRight = !lookingRight;
+    }
+
+    private void OnGUI()
+    {
+        GUI.Box(new Rect(0f, 0f, 100f, 20f), "Bitcoin: " + bitcon);
     }
 
 }
