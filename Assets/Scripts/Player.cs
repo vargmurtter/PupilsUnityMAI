@@ -41,7 +41,17 @@ public class Player : MonoBehaviour {
 
         transform.Translate(new Vector3(move * speed * Time.deltaTime, 0, 0));
 
-	}
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Save();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            GetSaves();
+        }
+
+    }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
@@ -74,6 +84,36 @@ public class Player : MonoBehaviour {
         transform.localScale = 
             new Vector3(scaleX, scale.y, scale.z);
         lookingRight = !lookingRight;
+    }
+
+    private JsonData data;
+
+    private void GetSaves()
+    {
+
+        string json = PlayerPrefs.GetString("savedata");
+
+        Debug.Log(json);
+
+        data = JsonUtility.FromJson<JsonData>(json);
+
+        transform.position = data.coords;
+
+    }
+
+    private void Save()
+    {
+        JsonData jd = new JsonData();
+
+        jd.coords = transform.position;
+        jd.deathCount = 0;
+
+        string json = JsonUtility.ToJson(jd);
+
+        PlayerPrefs.SetString("savedata", json);
+
+        Debug.Log(json);
+
     }
 
     private void OnGUI()
